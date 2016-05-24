@@ -1,4 +1,4 @@
-c l a s s SLPool : p u b l i c StoragePool {
+class SLPool: public StoragePool {
 
 public :
 
