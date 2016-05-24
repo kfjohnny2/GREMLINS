@@ -1,4 +1,8 @@
 
+
+#ifdef _STORAGEPOOL_H_
+#define _STORAGEPOOL_H_
+
 typedef size_t size_type;
 
 class StoragePool{
@@ -11,3 +15,5 @@ public:
 
 	virtual void Free( void * ) = 0;
 };
+
+#endif
