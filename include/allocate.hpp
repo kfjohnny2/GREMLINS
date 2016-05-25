@@ -1,4 +1,4 @@
-
+#include "storagepool.hpp"
 #ifdef _ALLOCATE_H_
 #define _ALLOCATE_H_
 
@@ -6,9 +6,9 @@ struct Tag {
     StoragePool * pool;
 };
 
-void * operator new ( size_type bytes , StoragePool & p );
+void * operator new ( std::size_t , StoragePool & );
 
-void * operator new ( size_type bytes ) ;
+void * operator new ( std::size_t  ) ;
 
 void operator delete ( void * arg ) ;
 

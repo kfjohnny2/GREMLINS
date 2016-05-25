@@ -4,7 +4,7 @@
 #ifdef _SLPOOL_H_
 #define _SLPOOL_H_
 
-typedef size_t size_type;
+typedef std::size_t size_type;
 
 class SLPool: public StoragePool {
 

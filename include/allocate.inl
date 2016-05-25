@@ -1,4 +1,5 @@
-
+#include "allocate.hpp"
+#include "storagepool.hpp"
 
 void * operator new ( size_type bytes , StoragePool & p ) {
  Tag* const tag = reinterpret_cast<Tag *>( p.Allocate(bytes + sizeof(Tag)));
