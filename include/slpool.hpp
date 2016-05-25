@@ -8,7 +8,7 @@ typedef size_t size_type;
 
 class SLPool: public StoragePool {
 
-public :
+public:
 
 struct Header {
 	unsigned int mui_Length;
@@ -30,7 +30,7 @@ private:
 	// ! < Head of list .
 	Block &mr_Sentinel ;
 	// ! < End of the list .
-public :
+public:
 	explicit SLPool ( size_type );
 	~SLPool ();
 	void  *Allocate ( size_type );
