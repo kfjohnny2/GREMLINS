@@ -1,4 +1,3 @@
-#include "allocate.hpp"
 #include "storagepool.hpp"
 
 void * operator new ( size_type bytes , StoragePool & p ) {
@@ -21,7 +20,7 @@ void operator delete ( void * arg ) noexcept {
  // The pool id (tag) is located `sizeof (Tag)' bytes before .
  Tag * const tag = reinterpret_cast<Tag *>( arg ) - 1U;
  if ( nullptr != tag -> pool ) // Memory block belongs to a particular GM.
-     tag->pool->Release( tag );
+     tag->pool->Free( tag );
  else
      std::free( tag ); // Memory block belongs to the operational system .
 }

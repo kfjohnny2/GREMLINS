@@ -1,6 +1,4 @@
-
-
-#ifdef _STORAGEPOOL_H_
+#ifndef _STORAGEPOOL_H_
 #define _STORAGEPOOL_H_
 
 typedef size_t size_type;

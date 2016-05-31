@@ -1,5 +1,5 @@
 #include "storagepool.hpp"
-#ifdef _ALLOCATE_H_
+#ifndef _ALLOCATE_H_
 #define _ALLOCATE_H_
 
 struct Tag {
