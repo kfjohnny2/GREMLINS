@@ -2,10 +2,12 @@
 #include "slpool.hpp"
 
 int main(int argc, char const *argv[]){
-    SLPool p( 250 ); // Instanciando um GM derivado de StoragePool .
+    SLPool p( 220 ); // Instanciando um GM derivado de StoragePool .
+    p.view();
     void *ptr = p.Allocate ( 100 ); // Alocar 100 bytes de memoria .
+    p.view();
     std::cout << ptr << std::endl;
-    // p.Free( ptr );
-
+    p.Free( ptr );
+    p.view();
     return EXIT_SUCCESS;
 }

@@ -17,22 +17,23 @@ public:
 	struct Block : public Header {
 		enum { BlockSize = 16 }; // Each block has 16 bytes .
 		union {
-			Block *mp_Next ;
-			char mc_RawArea [ BlockSize - sizeof( Header ) ];
+			Block *mp_Next;
+			char mc_RawArea [ BlockSize - sizeof(Header) ];
 		};
-	   Block(): Header (), mp_Next ( nullptr ) { /* Empty */ };
+	   Block(): Header (), mp_Next(nullptr) { /* Empty */ };
 	};
 
 private:
-	unsigned int mui_NumberOfBlocks ;
-	Block *mp_Pool ;// ! < Head of list .
-	Block &mr_Sentinel ;// ! < End of the list .
+	unsigned int mui_NumberOfBlocks;
+	Block *mp_Pool;//!< Head of list .
+	Block &mr_Sentinel;//!< End of the list .
 public:
-	explicit SLPool ( size_type );
+	explicit SLPool (size_type);
 	~SLPool ();
-	void  *Allocate ( size_type );
-	void Free ( void * );
-	float getLength(size_type );
+	void  *Allocate (size_type);
+	void Free (void *);
+	unsigned int getLength(size_type);
+	void view();
 };
 
 #include "slpool.inl"
