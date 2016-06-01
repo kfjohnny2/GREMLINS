@@ -1,11 +1,12 @@
 #include <iostream>
 #include <cmath>
 #include "allocate.hpp"
+#include "storagepool.hpp"
 
 typedef std::size_t size_type;
 
 SLPool::SLPool ( size_type bytes) : mui_NumberOfBlocks(getLength(bytes)), mp_Pool(new Block[mui_NumberOfBlocks+1])
-, mr_Sentinel( mp_Pool[mui_NumberOfBlocks]){ // não consigo me acostumar a inicializar construtor assim T_T
+, mr_Sentinel( mp_Pool[mui_NumberOfBlocks]){ 
    // mui_NumberOfBlocks = getLength(bytes);
     //mp_Pool(new Block[mui_NumberOfBlocks+1]);
     mp_Pool[0].mui_Length = mui_NumberOfBlocks;
