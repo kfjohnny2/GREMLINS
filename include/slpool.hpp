@@ -30,9 +30,34 @@ private:
 public:
 	explicit SLPool (size_type);
 	~SLPool ();
+	
+	/**
+	 * @brief This method reserve blocks in the pool according to the amount of bytes required.
+	 *
+	 * @param bytes The amount of bytes to reserve in the pool.
+	 */
 	void  *Allocate (size_type);
+	
+	void  *Best_Allocate (size_type);
+	
+	/**
+	 * @brief This method frees the space on the pool.
+	 *
+	 * @param ptReserved A pointer to the space that what to free.
+	 */
 	void Free (void *);
+	
+	/**
+	 * @brief Calculate the number of blocks needed to a given amount of bytes.
+	 *
+	 * @param  Bytes number of bytes to be allocated
+	 * @return The amount of blocks needed.
+	 */
 	unsigned int getLength(size_type);
+	
+	/**
+	 * @brief Print the corrent state of the pool using "[#]" to full space and "[ ]" to free space.
+	 */
 	void view();
 };
 
