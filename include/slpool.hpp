@@ -38,6 +38,13 @@ public:
 	 */
 	void  *Allocate (size_type);
 	
+	/**
+	 * @brief This method reserve blocks in the pool according to the amount of bytes required
+	 * traing to find the best sapace to alloc.
+	 *
+	 * @param bytes The amount of bytes to reserve in the pool.
+	 */
+
 	void  *Best_Allocate (size_type);
 	
 	/**
