@@ -1,3 +1,12 @@
+/**
+ *  @file allocate.inl
+ *  @brief GREMLINS Implementation
+ *  @author Johnnylee Bryan Marques da Rocha e Pedro Arthur Medeiros Fernandes.
+ *  @copyright Copyright &copy; 2016. All rights reserved.
+ * 
+ *  File with the implementations of new operators.
+ */
+ 
 #include "storagepool.hpp"
 
 void * operator new ( size_type bytes , StoragePool & p ) {

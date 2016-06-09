@@ -1,3 +1,12 @@
+/**
+ *  @file slpool.inl
+ *  @brief GREMLINS Implementation
+ *  @author Johnnylee Bryan Marques da Rocha e Pedro Arthur Medeiros Fernandes.
+ *  @copyright Copyright &copy; 2016. All rights reserved.
+ * 
+ *  File with the implementatio of the  class SLPool used to modfy the memory.
+ */
+ 
 #include <iostream>
 #include <cmath>
 #include <new>
@@ -8,7 +17,7 @@
 typedef std::size_t size_type;
 
 SLPool::SLPool (size_type bytes) : mui_NumberOfBlocks(getLength(bytes)), mp_Pool(new Block[mui_NumberOfBlocks+1])
-, mr_Sentinel( mp_Pool[mui_NumberOfBlocks]){ 
+, mr_Sentinel( mp_Pool[mui_NumberOfBlocks]){
     mp_Pool[0].mui_Length = mui_NumberOfBlocks;
     mp_Pool[0].mp_Next = nullptr;
     mr_Sentinel.mp_Next = mp_Pool;
@@ -23,7 +32,7 @@ void * SLPool::Allocate (size_type bytes){
     Block *work = (&mr_Sentinel)->mp_Next;
     Block *tail = &mr_Sentinel;
     size_type length = getLength(bytes);
-    
+
     while(work != nullptr and blockFound){
         if(work->mui_Length >= length){
             if(work->mui_Length == length){
@@ -35,26 +44,26 @@ void * SLPool::Allocate (size_type bytes){
                 tail->mp_Next->mui_Length = work->mui_Length-length;
                 work->mui_Length = length;
             }
-            
+
             blockFound=false;
             if(mr_Sentinel.mp_Next == work)//Tail = actual block then skip one node
                 mr_Sentinel.mp_Next = work->mp_Next;
             break;
-            
+
         } else{
             tail = tail->mp_Next; // skip one node on last item
             work = work->mp_Next; // skip one node on the actual node
         }
-        
-        if(blockFound) 
+
+        if(blockFound)
             throw (std::bad_alloc());
     }
-    
+
     return reinterpret_cast<void *>(reinterpret_cast<Header *>(work)+1U);
 }
 
 void  * SLPool::Best_Allocate (size_type bytes){
-    bool blockAllocted = false;
+    bool blockAllocted = false;//!< Control if the allocation was already done.
     Block *work = (&mr_Sentinel)->mp_Next;
     Block *best = nullptr;
     Block *tail = &mr_Sentinel;
@@ -63,7 +72,7 @@ void  * SLPool::Best_Allocate (size_type bytes){
 
     while(work != nullptr){
         std::cout << &best << std::endl;
-        if(work->mui_Length == length){
+        if(work->mui_Length == length){// if the freespace is the sabe, alloc and finish.
             blockAllocted = true;
             tail->mp_Next = work->mp_Next;
             break;
@@ -74,6 +83,7 @@ void  * SLPool::Best_Allocate (size_type bytes){
                 tailaux = tail;
             }
         }
+        //look for the best option
         else if(work->mui_Length > length and work->mui_Length < best->mui_Length)
                 best = work;
                 tailaux = tail;
@@ -81,11 +91,10 @@ void  * SLPool::Best_Allocate (size_type bytes){
         tail = tail->mp_Next; // skip one node on last item
         work = work->mp_Next; // skip one node on the actual node
     }
-    //If it don't found any possible position: erro bad_alloc
     if(!blockAllocted){
-        if( best == nullptr)
+        if( best == nullptr) //If it don't found any possible position: erro bad_alloc
             throw (std::bad_alloc());
-        else{
+        else{ // alloc in the best option
             tailaux->mp_Next = best+length;
             tailaux->mp_Next->mp_Next = best->mp_Next;
             tailaux->mp_Next->mui_Length = best->mui_Length-length;
@@ -99,9 +108,9 @@ void SLPool::Free(void * ptReserved) {
     Block* ptPostReserved = mr_Sentinel.mp_Next;
     Block* ptPrevReserved = &mr_Sentinel;
     Block* reserveBlock = reinterpret_cast <Block*>(reinterpret_cast <int*>(ptReserved)-1U);;
-    
+
     while(ptPostReserved != nullptr){
-        if(ptPostReserved>reserveBlock){
+        if(ptPostReserved > reserveBlock){
             if(((ptPrevReserved+ptPrevReserved->mui_Length) == reserveBlock ) && ((reserveBlock+reserveBlock->mui_Length) == ptPostReserved)){
                 ptPrevReserved->mp_Next = ptPostReserved->mp_Next; // Prev areas freed
                 ptPrevReserved->mui_Length += reserveBlock->mui_Length+ptPostReserved->mui_Length; // Combine all 3 areas in one node
@@ -113,31 +122,34 @@ void SLPool::Free(void * ptReserved) {
                 ptPrevReserved->mui_Length += reserveBlock->mui_Length;
                 reserveBlock->mui_Length = 0; // reset reserve pointer
             } else if ((reserveBlock+reserveBlock->mui_Length) == ptPostReserved){ // sum of the reserved block are the same of the post pointer
-                //TODO: 
+                //TODO:
                 reserveBlock->mp_Next = ptPostReserved->mp_Next; // Prev areas freed
                 ptPrevReserved->mp_Next=reserveBlock;
-                reserveBlock->mui_Length += ptPostReserved->mui_Length; 
+                reserveBlock->mui_Length += ptPostReserved->mui_Length;
                 ptPostReserved->mui_Length = 0; // reset reserve pointer
-            } else{  
+            } else{
                 //TODO: The prev area must be freed and the post is reserved. Free the are and sum with the prev.
                 ptPrevReserved->mp_Next = reserveBlock;
                 reserveBlock->mp_Next = ptPostReserved;
             }
             reserveBlock = nullptr;
-            return; // n era pra ser breack?
+            break;
+        }else{
+            ptPrevReserved=ptPrevReserved->mp_Next;
         }
-        ptPrevReserved = ptPostReserved;
-        ptPrevReserved = ptPostReserved->mp_Next;
+        ptPostReserved=ptPostReserved->mp_Next;
     }
-    
+
     if(ptPostReserved == nullptr){
-        mr_Sentinel.mp_Next = reserveBlock;
+        reserveBlock->mp_Next=ptPostReserved;
+        ptPrevReserved->mp_Next=reserveBlock;
         reserveBlock->mp_Next = nullptr;
+
     }
 }
 
 unsigned int SLPool::getLength(size_type bytes){
-    int tst = std::ceil(static_cast<float>(bytes)/Block::BlockSize); // std::ceil(static_cast<float>((bytes + sizeof(Header))/(Block::BlockSize)));
+    int tst = std::ceil(static_cast<float>(bytes)/Block::BlockSize); 
     return tst;
 }
 

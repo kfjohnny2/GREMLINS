@@ -4,7 +4,7 @@
  *  @author Johnnylee Bryan Marques da Rocha e Pedro Arthur Medeiros Fernandes.
  *  @copyright Copyright &copy; 2016. All rights reserved.
  * 
- *  File tast comparing the GREMLINS implementation with the OS.
+ *  File with a tast comparing the GREMLINS implementation with the OS.
  */
 
 #include <iostream>
@@ -35,6 +35,12 @@ int getRandomForSize(){
 	return 100 + (rand() % 2000 - 100);
 }
 
+/**
+ * @brief test the alocation of memory using the StoragePool
+ *
+ * @param _pool The SLPool criated where the thins will be allocated.
+ * @param _timeLimit The Max time a block can be allocated;
+ */
 void StoragePoolTest (StoragePool & _pool , std::time_t _timeLimit){
     std::priority_queue<Event> pq;
     
@@ -55,6 +61,11 @@ void StoragePoolTest (StoragePool & _pool , std::time_t _timeLimit){
     }
 }
 
+/**
+ * @brief Test the alocation of memory using the OS methods.
+ *
+ * @param _timeLimit The limit time a block can be allocated.
+ */
 void SOMemoryTest (std::time_t _timeLimit){
     std::priority_queue<Event> pq;
     
