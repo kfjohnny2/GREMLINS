@@ -1,0 +1,306 @@
+\hypertarget{class_s_l_pool}{}\section{S\+L\+Pool Class Reference}
+\label{class_s_l_pool}\index{S\+L\+Pool@{S\+L\+Pool}}
+Inheritance diagram for S\+L\+Pool\+:\begin{figure}[H]
+\begin{center}
+\leavevmode
+\includegraphics[height=2.000000cm]{class_s_l_pool}
+\end{center}
+\end{figure}
+\subsection*{Classes}
+\begin{DoxyCompactItemize}
+\item 
+struct \hyperlink{struct_s_l_pool_1_1_block}{Block}
+\item 
+struct \hyperlink{struct_s_l_pool_1_1_header}{Header}
+\end{DoxyCompactItemize}
+\subsection*{Public Member Functions}
+\begin{DoxyCompactItemize}
+\item 
+{\bfseries S\+L\+Pool} (size\+\_\+type)\hypertarget{class_s_l_pool_a65f9984edead66802c8af56b0b32b3f8}{}\label{class_s_l_pool_a65f9984edead66802c8af56b0b32b3f8}
+
+\item 
+void $\ast$ \hyperlink{class_s_l_pool_a552b1b836f38cd997fb8d2471ed66383}{Allocate} (size\+\_\+type)
+\begin{DoxyCompactList}\small\item\em This method reserve blocks in the pool according to the amount of bytes required. \end{DoxyCompactList}\item 
+void $\ast$ \hyperlink{class_s_l_pool_a75bc0a6c01a3cd43959d56c339339baf}{Best\+\_\+\+Allocate} (size\+\_\+type)
+\begin{DoxyCompactList}\small\item\em This method reserve blocks in the pool according to the amount of bytes required traing to find the best sapace to alloc. \end{DoxyCompactList}\item 
+void \hyperlink{class_s_l_pool_aed31c75c4a2d56acd2f845dda2c5b1ad}{Free} (void $\ast$)
+\begin{DoxyCompactList}\small\item\em This method frees the space on the pool. \end{DoxyCompactList}\item 
+unsigned int \hyperlink{class_s_l_pool_a63cfa56c62750f1dd15a73d5a2ea42c3}{get\+Length} (size\+\_\+type)
+\begin{DoxyCompactList}\small\item\em Calculate the number of blocks needed to a given amount of bytes. \end{DoxyCompactList}\item 
+void \hyperlink{class_s_l_pool_a9085c8ec923b46f9f72eb1fed7637a6f}{view} ()
+\begin{DoxyCompactList}\small\item\em Print the corrent state of the pool using \char`\"{}\mbox{[}\#\mbox{]}\char`\"{} to full space and \char`\"{}\mbox{[} \mbox{]}\char`\"{} to free space. \end{DoxyCompactList}\end{DoxyCompactItemize}
+
+
+\subsection{Member Function Documentation}
+\index{S\+L\+Pool@{S\+L\+Pool}!Allocate@{Allocate}}
+\index{Allocate@{Allocate}!S\+L\+Pool@{S\+L\+Pool}}
+\subsubsection[{\texorpdfstring{Allocate(size\+\_\+type)}{Allocate(size_type)}}]{\setlength{\rightskip}{0pt plus 5cm}void $\ast$ S\+L\+Pool\+::\+Allocate (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+type}]{bytes}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_s_l_pool_a552b1b836f38cd997fb8d2471ed66383}{}\label{class_s_l_pool_a552b1b836f38cd997fb8d2471ed66383}
+
+
+This method reserve blocks in the pool according to the amount of bytes required. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & The amount of bytes to reserve in the pool. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{class_storage_pool}{Storage\+Pool}.
+
+
+\begin{DoxyCode}
+30                                        \{
+31     \textcolor{keywordtype}{bool} blockFound = \textcolor{keyword}{true};
+32     Block *work = (&mr\_Sentinel)->mp\_Next;
+33     Block *tail = &mr\_Sentinel;
+34     size\_type length = \hyperlink{class_s_l_pool_a63cfa56c62750f1dd15a73d5a2ea42c3}{getLength}(bytes);
+35 
+36     \textcolor{keywordflow}{while}(work != \textcolor{keyword}{nullptr} and blockFound)\{\textcolor{comment}{// Run the whole SLPool.}
+37         \textcolor{keywordflow}{if}(work->mui\_Length >= length)\{
+38             \textcolor{keywordflow}{if}(work->mui\_Length == length)\{
+39                 tail->mp\_Next = work->mp\_Next;
+40             \}
+41             \textcolor{keywordflow}{else}\{
+42                 tail->mp\_Next = work+length;
+43                 tail->mp\_Next->mp\_Next = work->mp\_Next;
+44                 tail->mp\_Next->mui\_Length = work->mui\_Length-length;
+45                 work->mui\_Length = length;
+46             \}
+47 
+48             blockFound=\textcolor{keyword}{false};
+49             \textcolor{keywordflow}{if}(mr\_Sentinel.mp\_Next == work)\textcolor{comment}{//Tail = actual block then skip one node}
+50                 mr\_Sentinel.mp\_Next = work->mp\_Next;
+51             \textcolor{keywordflow}{break};
+52 
+53         \} \textcolor{keywordflow}{else}\{
+54             tail = tail->mp\_Next; \textcolor{comment}{// skip one node on last item}
+55             work = work->mp\_Next; \textcolor{comment}{// skip one node on the actual node}
+56         \}
+57 
+58         \textcolor{keywordflow}{if}(blockFound)
+59             \textcolor{keywordflow}{throw} (std::bad\_alloc());
+60     \}
+61 
+62     \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{void} *\textcolor{keyword}{>}(\textcolor{keyword}{reinterpret\_cast<}Header *\textcolor{keyword}{>}(work)+1U);
+63 \}
+\end{DoxyCode}
+\index{S\+L\+Pool@{S\+L\+Pool}!Best\+\_\+\+Allocate@{Best\+\_\+\+Allocate}}
+\index{Best\+\_\+\+Allocate@{Best\+\_\+\+Allocate}!S\+L\+Pool@{S\+L\+Pool}}
+\subsubsection[{\texorpdfstring{Best\+\_\+\+Allocate(size\+\_\+type)}{Best_Allocate(size_type)}}]{\setlength{\rightskip}{0pt plus 5cm}void $\ast$ S\+L\+Pool\+::\+Best\+\_\+\+Allocate (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+type}]{bytes}
+\end{DoxyParamCaption}
+)}\hypertarget{class_s_l_pool_a75bc0a6c01a3cd43959d56c339339baf}{}\label{class_s_l_pool_a75bc0a6c01a3cd43959d56c339339baf}
+
+
+This method reserve blocks in the pool according to the amount of bytes required traing to find the best sapace to alloc. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em bytes} & The amount of bytes to reserve in the pool. \\
+\hline
+\end{DoxyParams}
+$<$ Control if the allocation was already done. 
+\begin{DoxyCode}
+65                                              \{
+66     \textcolor{keywordtype}{bool} blockAllocted = \textcolor{keyword}{false};
+67     Block *work = (&mr\_Sentinel)->mp\_Next;
+68     Block *best = \textcolor{keyword}{nullptr};\textcolor{comment}{// get the best free space for the allocation}
+69     Block *tail = &mr\_Sentinel;
+70     Block *tailaux = \textcolor{keyword}{nullptr};
+71     size\_type length = \hyperlink{class_s_l_pool_a63cfa56c62750f1dd15a73d5a2ea42c3}{getLength}(bytes);
+72 
+73     \textcolor{keywordflow}{while}(work != \textcolor{keyword}{nullptr})\{\textcolor{comment}{// Run the whole SLPool.}
+74         std::cout << &best << std::endl;
+75         \textcolor{keywordflow}{if}(work->mui\_Length == length)\{\textcolor{comment}{// if the freespace is the sabe, allocate and finish.}
+76             blockAllocted = \textcolor{keyword}{true};
+77             tail->mp\_Next = work->mp\_Next;
+78             \textcolor{keywordflow}{break};
+79         \}
+80         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(best == \textcolor{keyword}{nullptr})\{
+81             \textcolor{keywordflow}{if}(work->mui\_Length > length)\{
+82                 best = work;
+83                 tailaux = tail;
+84             \}
+85         \}
+86         \textcolor{comment}{//look for the best option}
+87         \textcolor{keywordflow}{else} \textcolor{keywordflow}{if}(work->mui\_Length > length and work->mui\_Length < best->mui\_Length)
+88                 best = work;
+89                 tailaux = tail;
+90 
+91         tail = tail->mp\_Next; \textcolor{comment}{// skip one node on last item}
+92         work = work->mp\_Next; \textcolor{comment}{// skip one node on the actual node}
+93     \}
+94     \textcolor{keywordflow}{if}(!blockAllocted)\{
+95         \textcolor{keywordflow}{if}( best == \textcolor{keyword}{nullptr}) \textcolor{comment}{//If it don't found any possible position: erro bad\_alloc}
+96             \textcolor{keywordflow}{throw} (std::bad\_alloc());
+97         \textcolor{keywordflow}{else}\{ \textcolor{comment}{// allocate in the best option}
+98             tailaux->mp\_Next = best+length;
+99             tailaux->mp\_Next->mp\_Next = best->mp\_Next;
+100             tailaux->mp\_Next->mui\_Length = best->mui\_Length-length;
+101             best->mui\_Length = length;
+102         \}
+103     \}
+104     \textcolor{keywordflow}{return} \textcolor{keyword}{reinterpret\_cast<}\textcolor{keywordtype}{void} *\textcolor{keyword}{>}(\textcolor{keyword}{reinterpret\_cast<}Header *\textcolor{keyword}{>}(best)+1U);
+105 \}
+\end{DoxyCode}
+\index{S\+L\+Pool@{S\+L\+Pool}!Free@{Free}}
+\index{Free@{Free}!S\+L\+Pool@{S\+L\+Pool}}
+\subsubsection[{\texorpdfstring{Free(void $\ast$)}{Free(void *)}}]{\setlength{\rightskip}{0pt plus 5cm}void S\+L\+Pool\+::\+Free (
+\begin{DoxyParamCaption}
+\item[{void $\ast$}]{pt\+Reserved}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_s_l_pool_aed31c75c4a2d56acd2f845dda2c5b1ad}{}\label{class_s_l_pool_aed31c75c4a2d56acd2f845dda2c5b1ad}
+
+
+This method frees the space on the pool. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em pt\+Reserved} & A pointer to the space that what to free. \\
+\hline
+\end{DoxyParams}
+
+
+Implements \hyperlink{class_storage_pool}{Storage\+Pool}.
+
+
+\begin{DoxyCode}
+107                                    \{
+108     Block* ptPostReserved = mr\_Sentinel.mp\_Next;
+109     Block* ptPrevReserved = &mr\_Sentinel;
+110     Block* reserveBlock = reinterpret\_cast <Block*>(reinterpret\_cast <\textcolor{keywordtype}{int}*>(ptReserved)-1U);;
+111 
+112     \textcolor{keywordflow}{while}(ptPostReserved != \textcolor{keyword}{nullptr})\{
+113         \textcolor{keywordflow}{if}(ptPostReserved > reserveBlock)\{
+114             \textcolor{keywordflow}{if}(((ptPrevReserved+ptPrevReserved->mui\_Length) == reserveBlock ) && ((reserveBlock+
+      reserveBlock->mui\_Length) == ptPostReserved))\{
+115                 ptPrevReserved->mp\_Next = ptPostReserved->mp\_Next; \textcolor{comment}{// Prev areas freed}
+116                 ptPrevReserved->mui\_Length += reserveBlock->mui\_Length+ptPostReserved->mui\_Length; \textcolor{comment}{//
+       Combine all 3 areas in one node}
+117                 reserveBlock->mui\_Length = 0; \textcolor{comment}{// reset reserve pointer}
+118                 ptPostReserved->mui\_Length = 0; \textcolor{comment}{// reset post pointer}
+119             \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((ptPrevReserved+ptPrevReserved->mui\_Length) == reserveBlock)\{ \textcolor{comment}{// sum of the areas is
+       the same of the reserved block that will be liberated}
+120                 \textcolor{comment}{//TODO: Combine the reserved area with the prev; reset prev area; point the reserved area
+       to the prev.}
+121                 ptPrevReserved->mp\_Next = ptPostReserved->mp\_Next; \textcolor{comment}{// Prev areas freed}
+122                 ptPrevReserved->mui\_Length += reserveBlock->mui\_Length;
+123                 reserveBlock->mui\_Length = 0; \textcolor{comment}{// reset reserve pointer}
+124             \} \textcolor{keywordflow}{else} \textcolor{keywordflow}{if} ((reserveBlock+reserveBlock->mui\_Length) == ptPostReserved)\{ \textcolor{comment}{// sum of the reserved
+       block are the same of the post pointer}
+125                 \textcolor{comment}{//TODO:}
+126                 reserveBlock->mp\_Next = ptPostReserved->mp\_Next; \textcolor{comment}{// Prev areas freed}
+127                 ptPrevReserved->mp\_Next=reserveBlock;
+128                 reserveBlock->mui\_Length += ptPostReserved->mui\_Length;
+129                 ptPostReserved->mui\_Length = 0; \textcolor{comment}{// reset reserve pointer}
+130             \} \textcolor{keywordflow}{else}\{
+131                 \textcolor{comment}{//TODO: The prev area must be freed and the post is reserved. Free the are and sum with the
+       prev.}
+132                 ptPrevReserved->mp\_Next = reserveBlock;
+133                 reserveBlock->mp\_Next = ptPostReserved;
+134             \}
+135             reserveBlock = \textcolor{keyword}{nullptr};
+136             \textcolor{keywordflow}{break};
+137         \}\textcolor{keywordflow}{else}\{
+138             ptPrevReserved=ptPrevReserved->mp\_Next;
+139         \}
+140         ptPostReserved=ptPostReserved->mp\_Next;
+141     \}
+142 
+143     \textcolor{keywordflow}{if}(ptPostReserved == \textcolor{keyword}{nullptr})\{
+144         reserveBlock->mp\_Next=ptPostReserved;
+145         ptPrevReserved->mp\_Next=reserveBlock;
+146         reserveBlock->mp\_Next = \textcolor{keyword}{nullptr};
+147 
+148     \}
+149 \}
+\end{DoxyCode}
+\index{S\+L\+Pool@{S\+L\+Pool}!get\+Length@{get\+Length}}
+\index{get\+Length@{get\+Length}!S\+L\+Pool@{S\+L\+Pool}}
+\subsubsection[{\texorpdfstring{get\+Length(size\+\_\+type)}{getLength(size_type)}}]{\setlength{\rightskip}{0pt plus 5cm}unsigned int S\+L\+Pool\+::get\+Length (
+\begin{DoxyParamCaption}
+\item[{size\+\_\+type}]{bytes}
+\end{DoxyParamCaption}
+)}\hypertarget{class_s_l_pool_a63cfa56c62750f1dd15a73d5a2ea42c3}{}\label{class_s_l_pool_a63cfa56c62750f1dd15a73d5a2ea42c3}
+
+
+Calculate the number of blocks needed to a given amount of bytes. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em Bytes} & number of bytes to be allocated \\
+\hline
+\end{DoxyParams}
+\begin{DoxyReturn}{Returns}
+The amount of blocks needed. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+151                                              \{
+152     \textcolor{keywordtype}{int} tst = std::ceil(static\_cast<float>(bytes)/Block::BlockSize); 
+153     \textcolor{keywordflow}{return} tst;
+154 \}
+\end{DoxyCode}
+\index{S\+L\+Pool@{S\+L\+Pool}!view@{view}}
+\index{view@{view}!S\+L\+Pool@{S\+L\+Pool}}
+\subsubsection[{\texorpdfstring{view()}{view()}}]{\setlength{\rightskip}{0pt plus 5cm}void S\+L\+Pool\+::view (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)\hspace{0.3cm}{\ttfamily [virtual]}}\hypertarget{class_s_l_pool_a9085c8ec923b46f9f72eb1fed7637a6f}{}\label{class_s_l_pool_a9085c8ec923b46f9f72eb1fed7637a6f}
+
+
+Print the corrent state of the pool using \char`\"{}\mbox{[}\#\mbox{]}\char`\"{} to full space and \char`\"{}\mbox{[} \mbox{]}\char`\"{} to free space. 
+
+$<$ Gets the number of block in the Pool
+
+$<$ Used to get the number of blocks occupied by the free/full space
+
+$<$ A pointer to the next free space in the pool 
+
+Implements \hyperlink{class_storage_pool}{Storage\+Pool}.
+
+
+\begin{DoxyCode}
+156                  \{
+157       \textcolor{keywordtype}{int} total\_length = mui\_NumberOfBlocks; 
+158     \textcolor{keywordtype}{int} length; 
+159     \textcolor{keywordtype}{int} free\_length = 0;
+160     \textcolor{keywordtype}{int} full\_length = 0;
+161     Block* next\_free = (&mr\_Sentinel)->mp\_Next; 
+162 
+163     std::cout << \textcolor{stringliteral}{"| "};
+164     \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} i = 0; i < total\_length; i += length) \{
+165         length = mp\_Pool[i].mui\_Length;
+166         \textcolor{keywordflow}{if}(&mp\_Pool[i] == next\_free)\{ \textcolor{comment}{// If is a free space and print [#] to each block}
+167             \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} e = 0; e < length; e++) \{
+168                     std::cout << \textcolor{stringliteral}{"[ ]"};
+169             \}
+170             std::cout << \textcolor{stringliteral}{" | "};
+171             free\_length += length;
+172             next\_free = mp\_Pool[i].mp\_Next;
+173         \}
+174         \textcolor{keywordflow}{else} \{\textcolor{comment}{// Else, if is the space is full and print [#] to each block}
+175             \textcolor{keywordflow}{for} (\textcolor{keyword}{auto} e = 0; e < length; e++) \{
+176                 std::cout << \textcolor{stringliteral}{"[#]"};
+177             \}
+178             std::cout << \textcolor{stringliteral}{" | "};
+179             full\_length += length;
+180         \}
+181     \}
+182      std::cout << \textcolor{stringliteral}{"\(\backslash\)n\(\backslash\)n\(\backslash\)t>>> Number of free blocks: "} << free\_length << std::endl;
+183      std::cout << \textcolor{stringliteral}{"\(\backslash\)t>>> Number of allocated blocks: "} << full\_length << \textcolor{stringliteral}{"\(\backslash\)n"} << std::endl;
+184 \}
+\end{DoxyCode}
+
+
+The documentation for this class was generated from the following files\+:\begin{DoxyCompactItemize}
+\item 
+include/\hyperlink{slpool_8hpp}{slpool.\+hpp}\item 
+include/\hyperlink{slpool_8inl}{slpool.\+inl}\end{DoxyCompactItemize}

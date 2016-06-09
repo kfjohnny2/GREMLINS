@@ -1,0 +1,54 @@
+G\+R\+E\+M\+L\+I\+NS -\/ Ge\+R\+Enciador de Memória com L\+Ista e\+Ncadeada Simples (Memory Manager with Simple Linked List)
+
+\subsection*{Authors}
+
+The project were developed using Cloud9 I\+DE by\+:
+
+Johnnylee Bryan Marques da Rocha -\/ \href{https://github.com/kfjohnny2}{\tt Git\+Hub}
+
+Pedro Arthur Medeiros Fernandes -\/ \href{https://github.com/pedroarthur-mf}{\tt Git\+Hub}
+
+\subsection*{About}
+
+Is a memory requirement system that will take reserved block of memory and do some manipulations. Small blocks can be created by client to allocate inside the bigger block.
+
+\subsection*{Functionality}
+
+There is a class called \char`\"{}\+S\+L\+Pool\char`\"{} for the implementation of the methods from the abstract class \char`\"{}\+Storage\+Pool\char`\"{}.
+
+\subsubsection*{These methods are\+:}
+
+
+\begin{DoxyCode}
+\textcolor{keywordtype}{void} *Allocate ( std::size\_t ); \textcolor{comment}{// Used to insert some bytes of memory inside the bigger block;}
+
+\textcolor{keywordtype}{void} *Best\_Allocate ( std::size\_t ); \textcolor{comment}{// Used to insert some bytes seeking for the nearest empty block for
+       best time improvement;}
+
+\textcolor{keywordtype}{void} Free( \textcolor{keywordtype}{void} * ); \textcolor{comment}{// Used to liberate required bytes of memory from the bigger block;}
+\end{DoxyCode}
+
+
+\subsection*{How to Compile}
+
+There a two types of test, the timing test. The first\+: will use the method Storage\+Pool\+Test, that test the alocation of memory using the \hyperlink{class_storage_pool}{Storage\+Pool} and calculating the time of the \hyperlink{class_event}{Event}. The S\+O\+Memory\+Test calculate the time based on the SO timing
+\begin{DoxyItemize}
+\item For this test type the following command on terminal inside de \char`\"{}\+G\+R\+E\+M\+L\+I\+N\+S\char`\"{} folder\+: 
+\begin{DoxyCode}
+1 g++ -Wall -std=c++11 -I include/ src/drive\_gremlins.cpp -o bin/gremlins
+2 
+3 ./bin/gremlins
+\end{DoxyCode}
+
+\end{DoxyItemize}
+
+The second\+: Will make a series of manipulations using normal Allocate, Best-\/\+Fit Allocate and Free and printing the memory block state in each operation.
+\begin{DoxyItemize}
+\item Following the same instruction above, type\+: 
+\begin{DoxyCode}
+1 g++ -Wall -std=c++11 -I include/ src/drive\_gremlins2.cpp -o bin/gremlins
+2 
+3 ./bin/gremlins
+\end{DoxyCode}
+ 
+\end{DoxyItemize}

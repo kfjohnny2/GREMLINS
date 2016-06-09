@@ -1,0 +1,170 @@
+\hypertarget{drive__gremlins_8cpp}{}\section{src/drive\+\_\+gremlins.cpp File Reference}
+\label{drive__gremlins_8cpp}\index{src/drive\+\_\+gremlins.\+cpp@{src/drive\+\_\+gremlins.\+cpp}}
+
+
+G\+R\+E\+M\+L\+I\+NS Implementation.  
+
+
+{\ttfamily \#include $<$iostream$>$}\\*
+{\ttfamily \#include $<$ctime$>$}\\*
+{\ttfamily \#include $<$cstdlib$>$}\\*
+{\ttfamily \#include $<$queue$>$}\\*
+{\ttfamily \#include $<$chrono$>$}\\*
+{\ttfamily \#include \char`\"{}allocate.\+hpp\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}slpool.\+hpp\char`\"{}}\\*
+{\ttfamily \#include \char`\"{}event.\+hpp\char`\"{}}\\*
+\subsection*{Functions}
+\begin{DoxyCompactItemize}
+\item 
+std\+::time\+\_\+t \hyperlink{drive__gremlins_8cpp_a21e7c7c79ca75da72264d748ba0d481d}{get\+Random\+Time\+Interval} ()
+\begin{DoxyCompactList}\small\item\em Setup random numbers generator for memory size , say \mbox{[}100, 2000\mbox{]} bytes. \end{DoxyCompactList}\item 
+int \hyperlink{drive__gremlins_8cpp_a0aa6261ed80350fb37777559d4fed2a1}{get\+Random\+For\+Size} ()
+\begin{DoxyCompactList}\small\item\em Setup random numbers generator for time intervals , say \mbox{[}1, 100\mbox{]} units. \end{DoxyCompactList}\item 
+void \hyperlink{drive__gremlins_8cpp_a370ac5b02ea1189b139175e030cb9716}{Storage\+Pool\+Test} (\hyperlink{class_storage_pool}{Storage\+Pool} \&\+\_\+pool, std\+::time\+\_\+t \+\_\+time\+Limit)
+\begin{DoxyCompactList}\small\item\em test the alocation of memory using the \hyperlink{class_storage_pool}{Storage\+Pool} \end{DoxyCompactList}\item 
+void \hyperlink{drive__gremlins_8cpp_a64b701d8f9dd3687aaa00af6e8becb23}{S\+O\+Memory\+Test} (std\+::time\+\_\+t \+\_\+time\+Limit)
+\begin{DoxyCompactList}\small\item\em Test the alocation of memory using the OS methods. \end{DoxyCompactList}\item 
+int {\bfseries main} (int argc, char const $\ast$argv\mbox{[}$\,$\mbox{]})\hypertarget{drive__gremlins_8cpp_abf9e6b7e6f15df4b525a2e7705ba3089}{}\label{drive__gremlins_8cpp_abf9e6b7e6f15df4b525a2e7705ba3089}
+
+\end{DoxyCompactItemize}
+
+
+\subsection{Detailed Description}
+G\+R\+E\+M\+L\+I\+NS Implementation. 
+
+\begin{DoxyAuthor}{Author}
+Johnnylee Bryan Marques da Rocha e Pedro Arthur Medeiros Fernandes. 
+\end{DoxyAuthor}
+\begin{DoxyCopyright}{Copyright}
+Copyright \copyright{} 2016. All rights reserved.
+\end{DoxyCopyright}
+File with a tast comparing the G\+R\+E\+M\+L\+I\+NS implementation with the OS.
+
+\begin{DoxyAuthor}{Author}
+Johnnylee Bryan Marques da Rocha e Pedro Arthur Medeiros Fernandes. 
+\end{DoxyAuthor}
+\begin{DoxyCopyright}{Copyright}
+Copyright \copyright{} 2016. All rights reserved.
+\end{DoxyCopyright}
+File with a tast to pruve that the class \hyperlink{class_s_l_pool}{S\+L\+Pool} is working. 
+
+\subsection{Function Documentation}
+\index{drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}!get\+Random\+For\+Size@{get\+Random\+For\+Size}}
+\index{get\+Random\+For\+Size@{get\+Random\+For\+Size}!drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}}
+\subsubsection[{\texorpdfstring{get\+Random\+For\+Size()}{getRandomForSize()}}]{\setlength{\rightskip}{0pt plus 5cm}int get\+Random\+For\+Size (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{drive__gremlins_8cpp_a0aa6261ed80350fb37777559d4fed2a1}{}\label{drive__gremlins_8cpp_a0aa6261ed80350fb37777559d4fed2a1}
+
+
+Setup random numbers generator for time intervals , say \mbox{[}1, 100\mbox{]} units. 
+
+\begin{DoxyReturn}{Returns}
+A random number in the range \mbox{[}1, 100\mbox{]}. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+34                       \{
+35     \textcolor{keywordflow}{return} 100 + (rand() % 2000 - 100);
+36 \}
+\end{DoxyCode}
+\index{drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}!get\+Random\+Time\+Interval@{get\+Random\+Time\+Interval}}
+\index{get\+Random\+Time\+Interval@{get\+Random\+Time\+Interval}!drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}}
+\subsubsection[{\texorpdfstring{get\+Random\+Time\+Interval()}{getRandomTimeInterval()}}]{\setlength{\rightskip}{0pt plus 5cm}std\+::time\+\_\+t get\+Random\+Time\+Interval (
+\begin{DoxyParamCaption}
+{}
+\end{DoxyParamCaption}
+)}\hypertarget{drive__gremlins_8cpp_a21e7c7c79ca75da72264d748ba0d481d}{}\label{drive__gremlins_8cpp_a21e7c7c79ca75da72264d748ba0d481d}
+
+
+Setup random numbers generator for memory size , say \mbox{[}100, 2000\mbox{]} bytes. 
+
+\begin{DoxyReturn}{Returns}
+A random number in the range \mbox{[}100, 2000\mbox{]}. 
+\end{DoxyReturn}
+
+\begin{DoxyCode}
+26                                  \{
+27     \textcolor{keywordflow}{return} 1 + (rand() % 100 - 1);
+28 \}
+\end{DoxyCode}
+\index{drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}!S\+O\+Memory\+Test@{S\+O\+Memory\+Test}}
+\index{S\+O\+Memory\+Test@{S\+O\+Memory\+Test}!drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}}
+\subsubsection[{\texorpdfstring{S\+O\+Memory\+Test(std\+::time\+\_\+t \+\_\+time\+Limit)}{SOMemoryTest(std::time_t _timeLimit)}}]{\setlength{\rightskip}{0pt plus 5cm}void S\+O\+Memory\+Test (
+\begin{DoxyParamCaption}
+\item[{std\+::time\+\_\+t}]{\+\_\+time\+Limit}
+\end{DoxyParamCaption}
+)}\hypertarget{drive__gremlins_8cpp_a64b701d8f9dd3687aaa00af6e8becb23}{}\label{drive__gremlins_8cpp_a64b701d8f9dd3687aaa00af6e8becb23}
+
+
+Test the alocation of memory using the OS methods. 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+time\+Limit} & The limit time a block can be allocated. \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+69                                         \{
+70     std::priority\_queue<Event> pq;
+71     
+72     \textcolor{keywordflow}{for}( std::time\_t t (0); t < \_timeLimit; ++t )\{
+73         \textcolor{keywordflow}{while}(!pq.empty()) \{ \textcolor{comment}{// Run while we have events pending or time to run .}
+74             \hyperlink{class_event}{Event} ev = pq.top(); \textcolor{comment}{// Access the event with the smallest time - stamp .}
+75             \textcolor{keywordflow}{if}(ev.getTimeStamp() > t) \textcolor{keywordflow}{break} ; \textcolor{comment}{// Still some time left ....}
+76             
+77             \textcolor{comment}{// When we got here , the top event has run out of time .}
+78             pq.pop(); \textcolor{comment}{// Remove event from priority queue .}
+79             std::free(ev.getMemoryPtr()); \textcolor{comment}{// Calling free operator .}
+80         \}
+81     \textcolor{keyword}{auto} memSize = \hyperlink{drive__gremlins_8cpp_a0aa6261ed80350fb37777559d4fed2a1}{getRandomForSize} ();
+82     \textcolor{keywordtype}{void} * \textcolor{keyword}{const} add = std::malloc(memSize);
+83     \textcolor{keyword}{auto} elapsedTime = \hyperlink{drive__gremlins_8cpp_a21e7c7c79ca75da72264d748ba0d481d}{getRandomTimeInterval}();
+84     std::time\_t releaseTime = t+elapsedTime ; \textcolor{comment}{// Set time stamp some time from now .}
+85     pq.push(\hyperlink{class_event}{Event} (add, releaseTime)); \textcolor{comment}{// Creating a new simulation event .}
+86     \}
+87 \}
+\end{DoxyCode}
+\index{drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}!Storage\+Pool\+Test@{Storage\+Pool\+Test}}
+\index{Storage\+Pool\+Test@{Storage\+Pool\+Test}!drive\+\_\+gremlins.\+cpp@{drive\+\_\+gremlins.\+cpp}}
+\subsubsection[{\texorpdfstring{Storage\+Pool\+Test(\+Storage\+Pool \&\+\_\+pool, std\+::time\+\_\+t \+\_\+time\+Limit)}{StoragePoolTest(StoragePool &_pool, std::time_t _timeLimit)}}]{\setlength{\rightskip}{0pt plus 5cm}void Storage\+Pool\+Test (
+\begin{DoxyParamCaption}
+\item[{{\bf Storage\+Pool} \&}]{\+\_\+pool, }
+\item[{std\+::time\+\_\+t}]{\+\_\+time\+Limit}
+\end{DoxyParamCaption}
+)}\hypertarget{drive__gremlins_8cpp_a370ac5b02ea1189b139175e030cb9716}{}\label{drive__gremlins_8cpp_a370ac5b02ea1189b139175e030cb9716}
+
+
+test the alocation of memory using the \hyperlink{class_storage_pool}{Storage\+Pool} 
+
+
+\begin{DoxyParams}{Parameters}
+{\em \+\_\+pool} & The \hyperlink{class_s_l_pool}{S\+L\+Pool} criated where the thins will be allocated. \\
+\hline
+{\em \+\_\+time\+Limit} & The Max time a block can be allocated; \\
+\hline
+\end{DoxyParams}
+
+\begin{DoxyCode}
+44                                                                  \{
+45     std::priority\_queue<Event> pq;
+46     
+47     \textcolor{keywordflow}{for}( std::time\_t t (0); t < \_timeLimit; ++t )\{
+48         \textcolor{keywordflow}{while}(!pq.empty()) \{ \textcolor{comment}{// Run while we have events pending or time to run .}
+49             \hyperlink{class_event}{Event} ev = pq.top(); \textcolor{comment}{// Access the event with the smallest time - stamp .}
+50             \textcolor{keywordflow}{if}(ev.getTimeStamp() > t) \textcolor{keywordflow}{break} ; \textcolor{comment}{// Still some time left ....}
+51             
+52             \textcolor{comment}{// When we got here , the top event has run out of time .}
+53             pq.pop(); \textcolor{comment}{// Remove event from priority queue .}
+54             \_pool.Free(ev.getMemoryPtr()); \textcolor{comment}{// Calling free operator .}
+55         \}
+56     \textcolor{keyword}{auto} memSize = \hyperlink{drive__gremlins_8cpp_a0aa6261ed80350fb37777559d4fed2a1}{getRandomForSize} ();
+57     \textcolor{keywordtype}{void} * \textcolor{keyword}{const} add = \_pool.Allocate(memSize);
+58     \textcolor{keyword}{auto} elapsedTime = \hyperlink{drive__gremlins_8cpp_a21e7c7c79ca75da72264d748ba0d481d}{getRandomTimeInterval}();
+59     std::time\_t releaseTime = t+elapsedTime ; \textcolor{comment}{// Set time stamp some time from now .}
+60     pq.push(\hyperlink{class_event}{Event}(add, releaseTime)); \textcolor{comment}{// Creating a new simulation event .}
+61     \}
+62 \}
+\end{DoxyCode}
