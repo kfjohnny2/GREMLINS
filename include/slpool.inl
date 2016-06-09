@@ -33,7 +33,7 @@ void * SLPool::Allocate (size_type bytes){
     Block *tail = &mr_Sentinel;
     size_type length = getLength(bytes);
 
-    while(work != nullptr and blockFound){
+    while(work != nullptr and blockFound){// Run the whole SLPool.
         if(work->mui_Length >= length){
             if(work->mui_Length == length){
                 tail->mp_Next = work->mp_Next;
@@ -65,14 +65,14 @@ void * SLPool::Allocate (size_type bytes){
 void  * SLPool::Best_Allocate (size_type bytes){
     bool blockAllocted = false;//!< Control if the allocation was already done.
     Block *work = (&mr_Sentinel)->mp_Next;
-    Block *best = nullptr;
+    Block *best = nullptr;// get the best free space for the allocation
     Block *tail = &mr_Sentinel;
     Block *tailaux = nullptr;
     size_type length = getLength(bytes);
 
-    while(work != nullptr){
+    while(work != nullptr){// Run the whole SLPool.
         std::cout << &best << std::endl;
-        if(work->mui_Length == length){// if the freespace is the sabe, alloc and finish.
+        if(work->mui_Length == length){// if the freespace is the sabe, allocate and finish.
             blockAllocted = true;
             tail->mp_Next = work->mp_Next;
             break;
@@ -94,7 +94,7 @@ void  * SLPool::Best_Allocate (size_type bytes){
     if(!blockAllocted){
         if( best == nullptr) //If it don't found any possible position: erro bad_alloc
             throw (std::bad_alloc());
-        else{ // alloc in the best option
+        else{ // allocate in the best option
             tailaux->mp_Next = best+length;
             tailaux->mp_Next->mp_Next = best->mp_Next;
             tailaux->mp_Next->mui_Length = best->mui_Length-length;
